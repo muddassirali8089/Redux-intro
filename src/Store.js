@@ -1,29 +1,22 @@
-import {createStore} from "redux";
+import { createStore, combineReducers } from "redux";
 
-const initialState = {
-  balance :0,
-  loan:0,
+// ------------------ ACCOUNT STATE ------------------
+const initialStateAccount = {
+  balance: 0,
+  loan: 0,
   loanPurpose: "",
+};
 
-}
-function reducer(state = initialState, action) {
+function accountReducer(state = initialStateAccount, action) {
   switch (action.type) {
     case "account/deposit":
-      return {
-        ...state,
-        balance: state.balance + action.payload,
-      };
+      return { ...state, balance: state.balance + action.payload };
 
     case "account/withdraw":
-      return {
-        ...state,
-        balance: state.balance - action.payload,
-      };
+      return { ...state, balance: state.balance - action.payload };
 
     case "account/requestLoan":
-      // Only one loan at a time
       if (state.loan > 0) return state;
-
       return {
         ...state,
         loan: action.payload.amount,
@@ -33,7 +26,6 @@ function reducer(state = initialState, action) {
 
     case "account/payLoan":
       if (state.balance < state.loan) return state;
-
       return {
         ...state,
         balance: state.balance - state.loan,
@@ -46,70 +38,95 @@ function reducer(state = initialState, action) {
   }
 }
 
+// ------------------ CUSTOMER STATE ------------------
+const initialStateCustomer = {
+  fullName: "",
+  nationalID: "",
+  createdAt: "",
+};
 
+function customerReducer(state = initialStateCustomer, action) {
+  switch (action.type) {
+    case "customer/createCustomer":
+      return {
+        ...state,
+        fullName: action.payload.fullName,
+        nationalID: action.payload.nationalID,
+        createdAt: action.payload.createdAt,
+      };
 
+    case "customer/updateName":
+      return {
+        ...state,
+        fullName: action.payload,
+      };
 
-const store = createStore(reducer);
+    default:
+      return state;
+  }
+}
 
+// ------------------ COMBINE REDUCERS ------------------
+const rootReducer = combineReducers({
+  account: accountReducer,
+  customer: customerReducer,
+});
 
-// 💰 Deposit money
+// ------------------ STORE ------------------
+const store = createStore(rootReducer);
+
+// ------------------ ACTION CREATORS ------------------
+// Account
 export function deposit(amount) {
-  return {
-    type: "account/deposit",
-    payload: amount,
-  };
+  return { type: "account/deposit", payload: amount };
 }
 
-// 💸 Withdraw money
 export function withdraw(amount) {
-  return {
-    type: "account/withdraw",
-    payload: amount,
-  };
+  return { type: "account/withdraw", payload: amount };
 }
 
-// 🏦 Request loan
 export function requestLoan(amount, purpose) {
   return {
     type: "account/requestLoan",
-    payload: {
-      amount,
-      purpose,
-    },
+    payload: { amount, purpose },
   };
 }
 
-// ✅ Pay back loan
 export function payLoan() {
+  return { type: "account/payLoan" };
+}
+
+// Customer
+export function createCustomer(fullName, nationalID) {
   return {
-    type: "account/payLoan",
+    type: "customer/createCustomer",
+    payload: { fullName, nationalID, createdAt: new Date().toISOString() },
   };
 }
 
+export function updateName(fullName) {
+  return {
+    type: "customer/updateName",
+    payload: fullName,
+  };
+}
+
+// ------------------ DISPATCH EXAMPLES ------------------
 
 store.dispatch(deposit(1000));
-
-console.log(store.getState());
+console.log("After deposit:", store.getState());
 
 store.dispatch(withdraw(300));
-console.log(store.getState());
+console.log("After withdraw:", store.getState());
+
 store.dispatch(requestLoan(5000, "Buy a laptop"));
-console.log(store.getState());
+console.log("After requesting loan:", store.getState());
+
 store.dispatch(payLoan());
-console.log(store.getState());
+console.log("After paying loan:", store.getState());
 
- 
-// const store = createStore(reducer);
+store.dispatch(createCustomer("Ali Khan", "12345-6789012-3"));
+console.log("After creating customer:", store.getState());
 
-// store.dispatch({type : 'account/deposit' , payload : 500})
-
-// console.log(store.getState())
-
-// store.dispatch({type : 'account/withdraw' , payload : 200})
-
-// console.log(store.getState())
-
-
-
-
-
+store.dispatch(updateName("Muddassir Ali"));
+console.log("After updating name:", store.getState());

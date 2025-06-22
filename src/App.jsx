@@ -1,6 +1,6 @@
 
 import './index.css'
-import CreateCustomer from "./Features/customers/CreateCustomer";
+import CreateCustomer from "./Features/customers/CreateCustomer.jsx";
 import Customer from "./Features/customers/Customer";
 import AccountOperations from "./Features/accounts/AccountOperations";
 import BalanceDisplay from "./Features/accounts/BalanceDisplay";

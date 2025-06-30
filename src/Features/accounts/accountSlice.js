@@ -5,7 +5,7 @@ const initialStateAccount = {
   isLoading: false,
 };
 
-export default function accountReducer(state = initialStateAccount, action) {
+/*export default function accountReducer(state = initialStateAccount, action) {
   switch (action.type) {
     case "account/convertingCurrency":
       return { ...state, isLoading: true };
@@ -72,4 +72,4 @@ export function requestLoan(amount, purpose) {
 
 export function payLoan() {
   return { type: "account/payLoan" };
-}
+}*/

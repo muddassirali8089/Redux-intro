@@ -25,14 +25,14 @@ function AccountOperations() {
     }
 
     // Dispatch deposit action
-    dispatch(deposit(depositAmount, currency));
-
+    // dispatch(deposit(depositAmount, currency));
+    dispatch(deposit(depositAmount));
+    
     // Clear deposit amount input
     setDepositAmount("");
     setCurrency("USD")
    
   }
-
 
 
   function handleWithdrawal() {

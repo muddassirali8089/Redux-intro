@@ -25,8 +25,8 @@ function AccountOperations() {
     }
 
     // Dispatch deposit action
-    // dispatch(deposit(depositAmount, currency));
-    dispatch(deposit(depositAmount));
+    dispatch(deposit(depositAmount, currency));
+    //dispatch(deposit(depositAmount));
     
     // Clear deposit amount input
     setDepositAmount("");
